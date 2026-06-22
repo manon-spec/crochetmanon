@@ -210,6 +210,9 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
     }
     .swatch {
       display: flex;
@@ -218,6 +221,16 @@
       gap: 5px;
       cursor: pointer;
     }
+    /* Swatch image (photo réelle du fil) */
+    .swatch-img {
+      width: 48px; height: 48px;
+      object-fit: cover;
+      border: 2px solid transparent;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .swatch.selected .swatch-img,
+    .swatch:hover .swatch-img { border-color: #2c2620; transform: scale(1.05); }
+    /* Swatch couleur simple (hex, fallback admin) */
     .swatch-circle {
       width: 32px; height: 32px;
       border-radius: 50%;
@@ -227,11 +240,16 @@
     .swatch.selected .swatch-circle,
     .swatch:hover .swatch-circle { border-color: #2c2620; transform: scale(1.1); }
     .swatch-name {
-      font-size: 0.68rem;
+      font-size: 0.62rem;
       color: #a89880;
       text-align: center;
       max-width: 52px;
       line-height: 1.2;
+    }
+    .swatches-loading {
+      font-size: 0.8rem;
+      color: #c0b09a;
+      font-style: italic;
     }
 
     .couleurs-link-alt {
@@ -631,28 +649,25 @@
     const grid    = document.getElementById('swatchesGrid');
     const link    = document.getElementById('modalCouleursLink');
     grid.innerHTML = '';
-    if ((c.couleurs || []).length) {
-      section.style.display = 'block';
-      c.couleurs.forEach(s => {
-        const el = document.createElement('div');
-        el.className = 'swatch';
-        el.innerHTML = `
-          <div class="swatch-circle" style="background:${s.hex}"></div>
-          <div class="swatch-name">${s.nom}</div>
-        `;
-        el.addEventListener('click', () => {
-          grid.querySelectorAll('.swatch').forEach(sw => sw.classList.remove('selected'));
-          el.classList.add('selected');
-          document.getElementById('fieldCouleur').value = s.nom;
-        });
-        grid.appendChild(el);
-      });
-      link.href = c.couleursUrl || '#';
-      link.style.display = c.couleursUrl ? 'inline-block' : 'none';
-    } else if (c.couleursUrl) {
+
+    if (c.couleursUrl) {
       section.style.display = 'block';
       link.href = c.couleursUrl;
       link.style.display = 'inline-block';
+      // Charger les couleurs depuis l'API scraper
+      grid.innerHTML = '<span class="swatches-loading">Chargement des couleurs…</span>';
+      fetchColors(c.couleursUrl).then(colors => {
+        grid.innerHTML = '';
+        if (colors.length) {
+          renderSwatches(grid, colors);
+        } else if ((c.couleurs || []).length) {
+          renderHexSwatches(grid, c.couleurs);
+        }
+      });
+    } else if ((c.couleurs || []).length) {
+      section.style.display = 'block';
+      link.style.display = 'none';
+      renderHexSwatches(grid, c.couleurs);
     } else {
       section.style.display = 'none';
     }
@@ -804,6 +819,53 @@
     if (!confirm(`Supprimer "${creations[i].nom}" ?`)) return;
     creations.splice(i, 1);
     saveCreations(); renderAll();
+  }
+
+  // ── Swatches helpers ─────────────────────────────────────────────────────
+  const colorsCache = {};
+
+  async function fetchColors(url) {
+    if (colorsCache[url]) return colorsCache[url];
+    try {
+      const res = await fetch(`/api/scrape-colors?url=${encodeURIComponent(url)}`);
+      const data = await res.json();
+      colorsCache[url] = data.colors || [];
+      return colorsCache[url];
+    } catch { return []; }
+  }
+
+  function renderSwatches(grid, colors) {
+    colors.forEach(s => {
+      const el = document.createElement('div');
+      el.className = 'swatch';
+      el.innerHTML = `
+        <img class="swatch-img" src="${s.src}" alt="${s.nom}" title="${s.nom}" />
+        <div class="swatch-name">${s.nom}</div>
+      `;
+      el.addEventListener('click', () => {
+        grid.querySelectorAll('.swatch').forEach(sw => sw.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('fieldCouleur').value = s.nom;
+      });
+      grid.appendChild(el);
+    });
+  }
+
+  function renderHexSwatches(grid, couleurs) {
+    couleurs.forEach(s => {
+      const el = document.createElement('div');
+      el.className = 'swatch';
+      el.innerHTML = `
+        <div class="swatch-circle" style="background:${s.hex}"></div>
+        <div class="swatch-name">${s.nom}</div>
+      `;
+      el.addEventListener('click', () => {
+        grid.querySelectorAll('.swatch').forEach(sw => sw.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('fieldCouleur').value = s.nom;
+      });
+      grid.appendChild(el);
+    });
   }
 
   // ── Init ──────────────────────────────────────────────────────────────────
