@@ -693,8 +693,8 @@
     if (e.target === document.getElementById('modalOverlay')) closeModal();
   });
 
-  // ── Formulaire mailto: ────────────────────────────────────────────────────
-  document.getElementById('orderForm').addEventListener('submit', e => {
+  // ── Formulaire Formspree ──────────────────────────────────────────────────
+  document.getElementById('orderForm').addEventListener('submit', async e => {
     e.preventDefault();
     const prenom   = document.getElementById('fieldPrenom').value;
     const nom      = document.getElementById('fieldNom').value;
@@ -702,13 +702,30 @@
     const couleur  = document.getElementById('fieldCouleur').value;
     const message  = document.getElementById('fieldMessage').value;
 
-    const subject = encodeURIComponent(`Commande · ${creation} · ${prenom} ${nom}`);
-    const body    = encodeURIComponent(
-      `${prenom} ${nom} a passé une commande\n\nCréation : ${creation}\nCouleur : ${couleur}\nMessage : ${message}`
-    );
-    window.location.href = `mailto:${MANON_EMAIL}?subject=${subject}&body=${body}`;
-    document.getElementById('orderForm').style.display = 'none';
-    document.getElementById('successMsg').style.display = 'block';
+    const btn = document.querySelector('#orderForm .btn-primary');
+    btn.textContent = 'Envoi…';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('https://formspree.io/f/xojoqwyp', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prenom, nom, creation, couleur, message,
+          _subject: `Commande · ${creation} · ${prenom} ${nom}` })
+      });
+      if (res.ok) {
+        document.getElementById('orderForm').style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+      } else {
+        alert('Une erreur est survenue, réessaie.');
+        btn.textContent = 'Envoyer ma commande';
+        btn.disabled = false;
+      }
+    } catch {
+      alert('Pas de connexion. Réessaie dans quelques instants.');
+      btn.textContent = 'Envoyer ma commande';
+      btn.disabled = false;
+    }
   });
 
   // ── Admin : photos ────────────────────────────────────────────────────────
