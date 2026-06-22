@@ -252,6 +252,29 @@
       font-style: italic;
     }
 
+    /* Taille */
+    .taille-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 2px;
+    }
+    .taille-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.88rem;
+      color: #2c2620;
+      cursor: pointer;
+      background: #ede8e0;
+      padding: 7px 13px;
+      text-transform: none;
+      letter-spacing: 0;
+      margin: 0;
+    }
+    .taille-label input[type="radio"] { accent-color: #2c2620; cursor: pointer; }
+    .taille-label:has(input:checked) { background: #2c2620; color: #f7f3ee; }
+
     .couleurs-link-alt {
       display: inline-block;
       font-size: 0.78rem;
@@ -430,11 +453,16 @@
     </div>
 
     <div class="swatches-section" id="swatchesSection" style="display:none">
-      <div class="swatches-label">Choisir une couleur</div>
+      <div class="swatches-label">Couleur principale</div>
       <div class="swatches-grid" id="swatchesGrid"></div>
       <a class="couleurs-link-alt" id="modalCouleursLink" href="#" target="_blank" rel="noopener">
         Voir tous les coloris →
       </a>
+    </div>
+
+    <div class="swatches-section" id="swatchesSection2" style="display:none">
+      <div class="swatches-label">Deuxième couleur (optionnel)</div>
+      <div class="swatches-grid" id="swatchesGrid2"></div>
     </div>
 
     <form id="orderForm">
@@ -446,10 +474,21 @@
       <label>Nom</label>
       <input type="text" id="fieldNom" name="nom" required />
 
-      <label>Couleur choisie</label>
+      <label>Couleur principale</label>
       <input type="text" id="fieldCouleur" name="couleur" placeholder="Clique sur une couleur ou écris la référence" required />
 
-      <label>Message (taille, délai souhaité…)</label>
+      <label>Deuxième couleur (optionnel)</label>
+      <input type="text" id="fieldCouleur2" name="couleur2" placeholder="Clique sur une couleur ou laisse vide" />
+
+      <label>Taille</label>
+      <div class="taille-options">
+        <label class="taille-label"><input type="radio" name="taille" value="Bébé (0-2 ans)" /> Bébé (0-2 ans)</label>
+        <label class="taille-label"><input type="radio" name="taille" value="Enfant" /> Enfant</label>
+        <label class="taille-label"><input type="radio" name="taille" value="Adulte" /> Adulte</label>
+        <label class="taille-label"><input type="radio" name="taille" value="Adulte grande tête" /> Adulte grande tête</label>
+      </div>
+
+      <label>Message (délai souhaité, précisions…)</label>
       <textarea id="fieldMessage" name="message"></textarea>
 
       <div class="modal-actions">
@@ -650,26 +689,39 @@
     const link    = document.getElementById('modalCouleursLink');
     grid.innerHTML = '';
 
+    const section2 = document.getElementById('swatchesSection2');
+    const grid2    = document.getElementById('swatchesGrid2');
+    grid2.innerHTML = '';
+
     if (c.couleursUrl) {
       section.style.display = 'block';
       link.href = c.couleursUrl;
       link.style.display = 'inline-block';
-      // Charger les couleurs depuis l'API scraper
       grid.innerHTML = '<span class="swatches-loading">Chargement des couleurs…</span>';
       fetchColors(c.couleursUrl).then(colors => {
         grid.innerHTML = '';
+        grid2.innerHTML = '';
         if (colors.length) {
-          renderSwatches(grid, colors);
+          renderSwatches(grid, colors, 'fieldCouleur');
+          section2.style.display = 'block';
+          renderSwatches(grid2, colors, 'fieldCouleur2');
         } else if ((c.couleurs || []).length) {
-          renderHexSwatches(grid, c.couleurs);
+          renderHexSwatches(grid, c.couleurs, 'fieldCouleur');
+          section2.style.display = 'block';
+          renderHexSwatches(grid2, c.couleurs, 'fieldCouleur2');
+        } else {
+          section2.style.display = 'none';
         }
       });
     } else if ((c.couleurs || []).length) {
       section.style.display = 'block';
       link.style.display = 'none';
-      renderHexSwatches(grid, c.couleurs);
+      renderHexSwatches(grid, c.couleurs, 'fieldCouleur');
+      section2.style.display = 'block';
+      renderHexSwatches(grid2, c.couleurs, 'fieldCouleur2');
     } else {
       section.style.display = 'none';
+      section2.style.display = 'none';
     }
 
     document.getElementById('orderForm').style.display = 'block';
@@ -700,6 +752,8 @@
     const nom      = document.getElementById('fieldNom').value;
     const creation = document.getElementById('fieldCreation').value;
     const couleur  = document.getElementById('fieldCouleur').value;
+    const couleur2 = document.getElementById('fieldCouleur2').value;
+    const taille   = document.querySelector('input[name="taille"]:checked')?.value || '';
     const message  = document.getElementById('fieldMessage').value;
 
     const btn = document.querySelector('#orderForm .btn-primary');
@@ -710,7 +764,10 @@
       const res = await fetch('https://formspree.io/f/xojoqwyp', {
         method: 'POST',
         headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prenom, nom, creation, couleur, message,
+        body: JSON.stringify({ prenom, nom, creation, couleur,
+          ...(couleur2 && { couleur2 }),
+          ...(taille   && { taille }),
+          message,
           _subject: `Commande · ${creation} · ${prenom} ${nom}` })
       });
       if (res.ok) {
@@ -851,7 +908,7 @@
     } catch { return []; }
   }
 
-  function renderSwatches(grid, colors) {
+  function renderSwatches(grid, colors, fieldId) {
     colors.forEach(s => {
       const el = document.createElement('div');
       el.className = 'swatch';
@@ -862,13 +919,13 @@
       el.addEventListener('click', () => {
         grid.querySelectorAll('.swatch').forEach(sw => sw.classList.remove('selected'));
         el.classList.add('selected');
-        document.getElementById('fieldCouleur').value = s.nom;
+        document.getElementById(fieldId).value = s.nom;
       });
       grid.appendChild(el);
     });
   }
 
-  function renderHexSwatches(grid, couleurs) {
+  function renderHexSwatches(grid, couleurs, fieldId) {
     couleurs.forEach(s => {
       const el = document.createElement('div');
       el.className = 'swatch';
@@ -879,7 +936,7 @@
       el.addEventListener('click', () => {
         grid.querySelectorAll('.swatch').forEach(sw => sw.classList.remove('selected'));
         el.classList.add('selected');
-        document.getElementById('fieldCouleur').value = s.nom;
+        document.getElementById(fieldId).value = s.nom;
       });
       grid.appendChild(el);
     });
