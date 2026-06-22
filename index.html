@@ -9,41 +9,57 @@
 
     body {
       font-family: 'Georgia', serif;
-      background: #fff;
+      background: #f7f3ee;
       color: #1a1a1a;
       min-height: 100vh;
     }
 
     header {
-      padding: 48px 24px 32px;
+      padding: 56px 24px 36px;
       text-align: center;
-      border-bottom: 1px solid #f0f0f0;
     }
-    header h1 { font-size: 2rem; font-weight: normal; letter-spacing: 0.04em; }
-    header p  { margin-top: 8px; color: #888; font-size: 0.95rem; }
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: normal;
+      letter-spacing: 0.06em;
+      color: #2c2620;
+    }
+    header p {
+      margin-top: 10px;
+      color: #a89880;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .header-divider {
+      width: 40px;
+      height: 1px;
+      background: #c8b89a;
+      margin: 20px auto 0;
+    }
 
     main {
-      max-width: 960px;
+      max-width: 1020px;
       margin: 0 auto;
-      padding: 48px 24px;
+      padding: 52px 24px 80px;
     }
 
     /* ── Grille créations ── */
     .creations {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 40px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 48px 36px;
     }
 
-    .card { cursor: pointer; transition: transform 0.2s; }
-    .card:hover { transform: translateY(-3px); }
+    .card { cursor: pointer; }
+    .card:hover .card-carousel { box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+    .card-carousel { transition: box-shadow 0.3s; }
 
-    /* Carrousel dans la carte */
     .card-carousel {
       position: relative;
       width: 100%;
-      aspect-ratio: 4/5;
-      background: #f7f7f7;
+      aspect-ratio: 3/4;
+      background: #ede8e0;
       overflow: hidden;
     }
 
@@ -64,57 +80,75 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #ccc;
-      font-size: 0.85rem;
+      color: #c0b09a;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
     }
 
     .carousel-btn {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(255,255,255,0.8);
+      background: rgba(247,243,238,0.85);
       border: none;
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 1rem;
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 2;
       opacity: 0;
       transition: opacity 0.2s;
+      color: #2c2620;
     }
     .card-carousel:hover .carousel-btn { opacity: 1; }
-    .carousel-btn.prev { left: 6px; }
-    .carousel-btn.next { right: 6px; }
+    .carousel-btn.prev { left: 8px; }
+    .carousel-btn.next { right: 8px; }
 
     .carousel-dots {
       position: absolute;
-      bottom: 8px;
+      bottom: 10px;
       left: 0; right: 0;
       display: flex;
       justify-content: center;
       gap: 5px;
     }
     .dot {
-      width: 6px; height: 6px;
+      width: 5px; height: 5px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.45);
       transition: background 0.2s;
     }
-    .dot.active { background: #fff; }
+    .dot.active { background: rgba(255,255,255,0.9); }
 
-    .card-info { padding: 14px 0 0; }
-    .card-info h2 { font-size: 1.05rem; font-weight: normal; }
-    .card-info .matiere { color: #999; font-size: 0.85rem; margin-top: 4px; }
+    .card-info { padding: 16px 0 0; }
+    .card-info h2 { font-size: 1rem; font-weight: normal; letter-spacing: 0.02em; color: #2c2620; }
+    .card-info .matiere { color: #a89880; font-size: 0.8rem; margin-top: 5px; letter-spacing: 0.04em; }
+
+    /* ── Swatches sur la carte (aperçu) ── */
+    .card-swatches {
+      display: flex;
+      gap: 5px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .swatch-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .swatch-dot:hover { transform: scale(1.2); }
 
     /* ── Modal commande ── */
     .modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.45);
+      background: rgba(44,38,32,0.4);
       z-index: 100;
       align-items: center;
       justify-content: center;
@@ -123,25 +157,24 @@
     .modal-overlay.open { display: flex; }
 
     .modal {
-      background: #fff;
-      max-width: 520px;
+      background: #faf7f3;
+      max-width: 540px;
       width: 100%;
-      padding: 36px;
-      max-height: 90vh;
+      padding: 40px;
+      max-height: 92vh;
       overflow-y: auto;
     }
 
-    .modal h2 { font-size: 1.3rem; font-weight: normal; margin-bottom: 6px; }
-    .modal .matiere { color: #999; font-size: 0.85rem; margin-bottom: 20px; }
+    .modal h2 { font-size: 1.4rem; font-weight: normal; letter-spacing: 0.03em; color: #2c2620; }
+    .modal .matiere { color: #a89880; font-size: 0.82rem; margin-top: 5px; letter-spacing: 0.04em; }
 
-    /* Carrousel dans le modal */
     .modal-carousel {
       position: relative;
       width: 100%;
       aspect-ratio: 4/3;
-      background: #f7f7f7;
+      background: #ede8e0;
       overflow: hidden;
-      margin-bottom: 20px;
+      margin: 24px 0 20px;
     }
     .modal-carousel img {
       position: absolute;
@@ -159,170 +192,193 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #ccc;
-      font-size: 0.85rem;
+      color: #c0b09a;
+      font-size: 0.8rem;
     }
     .modal-carousel .carousel-btn { opacity: 1; }
 
-    .modal a.couleurs-link {
-      display: inline-block;
-      margin-bottom: 20px;
-      font-size: 0.9rem;
-      color: #555;
-      text-decoration: underline;
+    /* Swatches dans le modal */
+    .swatches-section { margin-bottom: 20px; }
+    .swatches-label {
+      font-size: 0.78rem;
+      color: #a89880;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .swatches-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .swatch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .swatch-circle {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .swatch.selected .swatch-circle,
+    .swatch:hover .swatch-circle { border-color: #2c2620; transform: scale(1.1); }
+    .swatch-name {
+      font-size: 0.68rem;
+      color: #a89880;
+      text-align: center;
+      max-width: 52px;
+      line-height: 1.2;
     }
 
-    label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 6px; margin-top: 16px; }
+    .couleurs-link-alt {
+      display: inline-block;
+      font-size: 0.78rem;
+      color: #a89880;
+      text-decoration: underline;
+      margin-top: 8px;
+      letter-spacing: 0.02em;
+    }
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      color: #a89880;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      margin-top: 18px;
+    }
     input, textarea {
       width: 100%;
-      border: 1px solid #ddd;
-      padding: 10px 12px;
+      border: 1px solid #ddd5c8;
+      padding: 11px 13px;
       font-family: inherit;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       outline: none;
       transition: border-color 0.2s;
       border-radius: 0;
       background: #fff;
+      color: #2c2620;
     }
-    input:focus, textarea:focus { border-color: #aaa; }
-    textarea { resize: vertical; min-height: 90px; }
+    input:focus, textarea:focus { border-color: #a89880; }
+    textarea { resize: vertical; min-height: 80px; }
 
     .modal-actions { display: flex; gap: 12px; margin-top: 28px; }
 
     button {
       cursor: pointer;
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       border: none;
-      padding: 11px 24px;
+      padding: 12px 24px;
+      letter-spacing: 0.04em;
     }
-    .btn-primary { background: #1a1a1a; color: #fff; flex: 1; }
-    .btn-primary:hover { background: #333; }
-    .btn-secondary { background: #f0f0f0; color: #555; }
-    .btn-secondary:hover { background: #e5e5e5; }
+    .btn-primary { background: #2c2620; color: #f7f3ee; flex: 1; }
+    .btn-primary:hover { background: #3d342c; }
+    .btn-secondary { background: #ede8e0; color: #6b5d50; }
+    .btn-secondary:hover { background: #e0d8ce; }
 
     .success-msg {
       display: none;
       text-align: center;
-      padding: 24px 0 8px;
-      color: #555;
-      font-size: 0.95rem;
-      line-height: 1.6;
+      padding: 28px 0 8px;
+      color: #6b5d50;
+      font-size: 0.92rem;
+      line-height: 1.7;
     }
 
     /* ── Vue admin ── */
     .admin-bar {
       display: none;
-      background: #1a1a1a;
-      color: #fff;
+      background: #2c2620;
+      color: #c8b89a;
       padding: 10px 24px;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       text-align: center;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
     body.admin .admin-bar { display: block; }
 
-    .admin-card-actions {
-      display: none;
-      gap: 8px;
-      margin-top: 10px;
-    }
+    .admin-card-actions { display: none; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
     body.admin .admin-card-actions { display: flex; }
 
     .btn-admin {
-      font-size: 0.75rem;
-      padding: 6px 12px;
-      background: #f0f0f0;
-      color: #555;
+      font-size: 0.72rem;
+      padding: 5px 11px;
+      background: #ede8e0;
+      color: #6b5d50;
       border: none;
       cursor: pointer;
+      letter-spacing: 0.02em;
     }
-    .btn-admin:hover { background: #e0e0e0; }
-    .btn-admin.danger { background: #fee; color: #c00; }
-    .btn-admin.danger:hover { background: #fcc; }
+    .btn-admin:hover { background: #ddd5c8; }
+    .btn-admin.danger { background: #f5e8e8; color: #a03030; }
+    .btn-admin.danger:hover { background: #ead0d0; }
 
-    /* Panel upload Cloudinary */
-    .upload-panel {
+    /* Panel upload */
+    .panel-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.5);
+      background: rgba(44,38,32,0.5);
       z-index: 200;
       align-items: center;
       justify-content: center;
       padding: 24px;
     }
-    .upload-panel.open { display: flex; }
-    .upload-box {
-      background: #fff;
+    .panel-overlay.open { display: flex; }
+    .panel-box {
+      background: #faf7f3;
       padding: 36px;
-      max-width: 480px;
+      max-width: 500px;
       width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
     }
-    .upload-box h3 { font-weight: normal; margin-bottom: 20px; }
-    .upload-box .photos-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 16px;
-      min-height: 60px;
-    }
-    .upload-box .photos-list img {
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
-    }
+    .panel-box h3 { font-weight: normal; font-size: 1.1rem; color: #2c2620; margin-bottom: 20px; }
+
+    .photos-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; min-height: 60px; }
     .photo-thumb-wrap { position: relative; }
-    .photo-thumb-wrap .remove-photo {
-      position: absolute;
-      top: -6px; right: -6px;
+    .photo-thumb-wrap img { width: 80px; height: 80px; object-fit: cover; }
+    .remove-photo {
+      position: absolute; top: -6px; right: -6px;
       width: 18px; height: 18px;
-      background: #c00;
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      font-size: 0.65rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
+      background: #a03030; color: #fff;
+      border: none; border-radius: 50%;
+      font-size: 0.65rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; padding: 0;
     }
-    .upload-actions { display: flex; gap: 10px; margin-top: 16px; }
 
-    /* Formulaire ajout création */
-    .new-creation-panel {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+    /* Swatches admin */
+    .admin-swatches-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .admin-swatch-item {
+      display: flex; align-items: center; gap: 6px;
+      background: #ede8e0; padding: 5px 8px; font-size: 0.78rem; color: #2c2620;
     }
-    .new-creation-panel.open { display: flex; }
-    .new-creation-box {
-      background: #fff;
-      padding: 36px;
-      max-width: 480px;
-      width: 100%;
-    }
-    .new-creation-box h3 { font-weight: normal; margin-bottom: 20px; }
+    .admin-swatch-color { width: 16px; height: 16px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1); flex-shrink: 0; }
+    .admin-swatch-remove { background: none; border: none; cursor: pointer; color: #a03030; font-size: 0.9rem; padding: 0; }
+    .swatch-add-row { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+    .swatch-add-row input[type="text"] { flex: 1; min-width: 120px; }
+    .swatch-add-row input[type="color"] { width: 40px; height: 36px; border: 1px solid #ddd5c8; padding: 2px; cursor: pointer; background: #fff; }
+
+    .panel-actions { display: flex; gap: 10px; margin-top: 20px; }
+
+    /* Nouvelle création */
+    .admin-global-actions { display: none; justify-content: center; margin-bottom: 40px; }
+    body.admin .admin-global-actions { display: flex; }
 
     footer {
       text-align: center;
       padding: 48px 24px;
-      color: #ccc;
-      font-size: 0.8rem;
+      color: #c0b09a;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
     }
-
-    .admin-global-actions {
-      display: none;
-      justify-content: center;
-      margin-bottom: 32px;
-    }
-    body.admin .admin-global-actions { display: flex; }
   </style>
 </head>
 <body>
@@ -332,6 +388,7 @@
 <header>
   <h1>Créations Crochet</h1>
   <p>Pièces faites main · Commande sur mesure</p>
+  <div class="header-divider"></div>
 </header>
 
 <main>
@@ -343,34 +400,38 @@
 
 <!-- Modal commande -->
 <div class="modal-overlay" id="modalOverlay">
-  <div class="modal" id="modal">
+  <div class="modal">
     <h2 id="modalNom"></h2>
     <div class="matiere" id="modalMatiere"></div>
 
     <div class="modal-carousel" id="modalCarousel">
-      <div class="placeholder">Aucune photo</div>
+      <div class="placeholder">Photo à venir</div>
       <button class="carousel-btn prev" onclick="modalSlide(-1)">‹</button>
       <button class="carousel-btn next" onclick="modalSlide(1)">›</button>
       <div class="carousel-dots" id="modalDots"></div>
     </div>
 
-    <a class="couleurs-link" id="modalCouleursLink" href="#" target="_blank" rel="noopener">
-      Choisir une couleur sur le site de la marque →
-    </a>
+    <div class="swatches-section" id="swatchesSection" style="display:none">
+      <div class="swatches-label">Choisir une couleur</div>
+      <div class="swatches-grid" id="swatchesGrid"></div>
+      <a class="couleurs-link-alt" id="modalCouleursLink" href="#" target="_blank" rel="noopener">
+        Voir tous les coloris →
+      </a>
+    </div>
 
     <form id="orderForm">
       <input type="hidden" name="creation" id="fieldCreation" />
 
-      <label for="fieldPrenom">Prénom</label>
+      <label>Prénom</label>
       <input type="text" id="fieldPrenom" name="prenom" required />
 
-      <label for="fieldNom">Nom</label>
+      <label>Nom</label>
       <input type="text" id="fieldNom" name="nom" required />
 
-      <label for="fieldCouleur">Référence couleur choisie</label>
-      <input type="text" id="fieldCouleur" name="couleur" placeholder="ex. Drops Karisma coloris 100 Off White" required />
+      <label>Couleur choisie</label>
+      <input type="text" id="fieldCouleur" name="couleur" placeholder="Clique sur une couleur ou écris la référence" required />
 
-      <label for="fieldMessage">Message (taille, délai souhaité…)</label>
+      <label>Message (taille, délai souhaité…)</label>
       <textarea id="fieldMessage" name="message"></textarea>
 
       <div class="modal-actions">
@@ -385,21 +446,45 @@
   </div>
 </div>
 
-<!-- Panel upload photos -->
-<div class="upload-panel" id="uploadPanel">
-  <div class="upload-box">
+<!-- Panel photos -->
+<div class="panel-overlay" id="uploadPanel">
+  <div class="panel-box">
     <h3 id="uploadTitle">Photos</h3>
     <div class="photos-list" id="photosList"></div>
-    <button class="btn-admin" id="uploadBtn">+ Ajouter une photo</button>
-    <div class="upload-actions">
+    <button class="btn-admin" id="uploadBtn">+ Ajouter des photos</button>
+    <div class="panel-actions">
       <button class="btn-secondary" onclick="closeUpload()">Fermer</button>
     </div>
   </div>
 </div>
 
+<!-- Panel couleurs -->
+<div class="panel-overlay" id="colorsPanel">
+  <div class="panel-box">
+    <h3 id="colorsPanelTitle">Couleurs</h3>
+
+    <div class="admin-swatches-list" id="adminSwatchesList"></div>
+
+    <div class="swatches-label" style="margin-bottom:10px">Ajouter une couleur</div>
+    <div class="swatch-add-row">
+      <input type="color" id="swatchColor" value="#d4a574" />
+      <input type="text" id="swatchName" placeholder="Nom (ex. Caramel)" />
+      <button class="btn-admin" onclick="addSwatch()">Ajouter</button>
+    </div>
+
+    <label style="margin-top:8px">Lien vers le site de la marque</label>
+    <input type="url" id="colorsUrl" placeholder="https://..." />
+
+    <div class="panel-actions">
+      <button class="btn-secondary" onclick="closeColors()">Annuler</button>
+      <button class="btn-primary" onclick="saveColors()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
 <!-- Panel nouvelle création -->
-<div class="new-creation-panel" id="newCreationPanel">
-  <div class="new-creation-box">
+<div class="panel-overlay" id="newCreationPanel">
+  <div class="panel-box">
     <h3>Nouvelle création</h3>
     <label>Nom</label>
     <input type="text" id="ncNom" placeholder="Bonnet, sac, top..." />
@@ -407,64 +492,66 @@
     <input type="text" id="ncMatiere" placeholder="Laine, coton..." />
     <label>Lien vers les couleurs</label>
     <input type="url" id="ncCouleurs" placeholder="https://..." />
-    <div class="upload-actions" style="margin-top:24px">
+    <div class="panel-actions" style="margin-top:24px">
       <button class="btn-secondary" onclick="closeNewCreation()">Annuler</button>
       <button class="btn-primary" onclick="saveNewCreation()">Ajouter</button>
     </div>
   </div>
 </div>
 
-<!-- Cloudinary widget -->
 <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
 
 <script>
-  // ── Config ────────────────────────────────────────────────────────────────
   const CLOUD_NAME    = 'dpuk356dk';
   const UPLOAD_PRESET = 'crochet_upload';
   const MANON_EMAIL   = 'tapie.manon@gmail.com';
 
-  // ── Créations (source de vérité) ──────────────────────────────────────────
-  // Pour ajouter une création : dupliquer un objet.
-  // images : tableau d'URLs Cloudinary (vide = placeholder affiché)
+  // ── Données ───────────────────────────────────────────────────────────────
+  function loadCreations() {
+    try { return JSON.parse(localStorage.getItem('creations')) || null; } catch { return null; }
+  }
+  function saveCreations() { localStorage.setItem('creations', JSON.stringify(creations)); }
+
   let creations = loadCreations() || [
     {
       nom: "Bonnet fisherman",
       matiere: "Laine",
       images: [],
-      couleursUrl: "https://www.garnstudio.com/yarn.php?cid=19"
+      couleursUrl: "",
+      couleurs: []
     },
     {
       nom: "Bob",
       matiere: "Coton",
       images: [],
-      couleursUrl: "https://www.garnstudio.com/yarn.php?cid=6"
+      couleursUrl: "https://www.laines-du-monde.com/produit/paris/",
+      couleurs: []
     },
     {
       nom: "Écharpe Sophie",
       matiere: "Laine + coton",
       images: [],
-      couleursUrl: "https://www.garnstudio.com/yarn.php?cid=19"
+      couleursUrl: "",
+      couleurs: []
     }
   ];
 
-  function loadCreations() {
-    try { return JSON.parse(localStorage.getItem('creations')) || null; } catch { return null; }
-  }
-  function saveCreations() {
-    localStorage.setItem('creations', JSON.stringify(creations));
-  }
-
-  // ── Mode admin ────────────────────────────────────────────────────────────
+  // ── Admin ─────────────────────────────────────────────────────────────────
   const isAdmin = new URLSearchParams(location.search).get('admin') === 'true';
   if (isAdmin) document.body.classList.add('admin');
 
-  // ── Rendu des cartes ──────────────────────────────────────────────────────
+  // ── Rendu ─────────────────────────────────────────────────────────────────
   function renderAll() {
     const container = document.getElementById('creations');
     container.innerHTML = '';
     creations.forEach((c, i) => {
       const card = document.createElement('div');
       card.className = 'card';
+
+      const swatchDots = (c.couleurs || []).slice(0,8).map(s =>
+        `<div class="swatch-dot" style="background:${s.hex}" title="${s.nom}"></div>`
+      ).join('');
+
       card.innerHTML = `
         <div class="card-carousel" id="cc-${i}">
           ${c.images.length === 0
@@ -476,19 +563,20 @@
             <button class="carousel-btn prev" onclick="cardSlide(event,${i},-1)">‹</button>
             <button class="carousel-btn next" onclick="cardSlide(event,${i},1)">›</button>
             <div class="carousel-dots">
-              ${c.images.map((_,j) => `<div class="dot ${j===0?'active':''}" id="cdot-${i}-${j}"></div>`).join('')}
+              ${c.images.map((_,j) => `<div class="dot ${j===0?'active':''}"></div>`).join('')}
             </div>` : ''}
         </div>
         <div class="card-info">
           <h2>${c.nom}</h2>
           <div class="matiere">${c.matiere}</div>
+          ${swatchDots ? `<div class="card-swatches">${swatchDots}</div>` : ''}
         </div>
         <div class="admin-card-actions">
           <button class="btn-admin" onclick="openUpload(${i})">📷 Photos</button>
+          <button class="btn-admin" onclick="openColors(${i})">🎨 Couleurs</button>
           <button class="btn-admin danger" onclick="deleteCreation(${i})">Supprimer</button>
         </div>
       `;
-      // Clic sur la carte → ouvre modal (sauf si clic sur bouton admin)
       card.querySelector('.card-carousel').addEventListener('click', () => openModal(i));
       card.querySelector('.card-info').addEventListener('click', () => openModal(i));
       container.appendChild(card);
@@ -504,47 +592,69 @@
     cardIndexes[i] = ((cardIndexes[i] || 0) + dir + c.images.length) % c.images.length;
     const el = document.getElementById(`cc-${i}`);
     el.querySelectorAll('img').forEach((img, j) => img.classList.toggle('active', j === cardIndexes[i]));
-    el.querySelectorAll('.dot').forEach((d, j) => d.classList.toggle('active', j === cardIndexes[i]));
+    el.querySelectorAll('.dot').forEach((d, j)  => d.classList.toggle('active', j === cardIndexes[i]));
   }
 
-  // ── Modal commande ────────────────────────────────────────────────────────
-  let modalIdx = 0;
-  let modalImgIdx = 0;
+  // ── Modal ─────────────────────────────────────────────────────────────────
+  let modalIdx = 0, modalImgIdx = 0;
 
   function openModal(i) {
-    modalIdx = i;
-    modalImgIdx = 0;
+    modalIdx = i; modalImgIdx = 0;
     const c = creations[i];
     document.getElementById('modalNom').textContent     = c.nom;
     document.getElementById('modalMatiere').textContent = c.matiere;
     document.getElementById('fieldCreation').value      = c.nom;
 
-    const link = document.getElementById('modalCouleursLink');
-    link.href = c.couleursUrl || '#';
-    link.style.display = c.couleursUrl ? 'inline-block' : 'none';
-
-    // Carrousel modal
+    // Carrousel
     const carousel = document.getElementById('modalCarousel');
     const dots     = document.getElementById('modalDots');
     carousel.querySelectorAll('img').forEach(img => img.remove());
     dots.innerHTML = '';
-
+    const ph = carousel.querySelector('.placeholder');
     if (c.images.length) {
-      carousel.querySelector('.placeholder') && (carousel.querySelector('.placeholder').style.display = 'none');
+      ph && (ph.style.display = 'none');
       c.images.forEach((url, j) => {
         const img = document.createElement('img');
-        img.src = url;
-        img.alt = c.nom;
+        img.src = url; img.alt = c.nom;
         if (j === 0) img.classList.add('active');
         carousel.insertBefore(img, carousel.querySelector('.carousel-btn.prev'));
         const dot = document.createElement('div');
         dot.className = 'dot' + (j === 0 ? ' active' : '');
         dots.appendChild(dot);
       });
-      carousel.style.display = 'block';
     } else {
-      carousel.style.display = c.images.length === 0 ? 'flex' : 'block';
-      if (carousel.querySelector('.placeholder')) carousel.querySelector('.placeholder').style.display = 'flex';
+      ph && (ph.style.display = 'flex');
+    }
+
+    // Swatches
+    const section = document.getElementById('swatchesSection');
+    const grid    = document.getElementById('swatchesGrid');
+    const link    = document.getElementById('modalCouleursLink');
+    grid.innerHTML = '';
+    if ((c.couleurs || []).length) {
+      section.style.display = 'block';
+      c.couleurs.forEach(s => {
+        const el = document.createElement('div');
+        el.className = 'swatch';
+        el.innerHTML = `
+          <div class="swatch-circle" style="background:${s.hex}"></div>
+          <div class="swatch-name">${s.nom}</div>
+        `;
+        el.addEventListener('click', () => {
+          grid.querySelectorAll('.swatch').forEach(sw => sw.classList.remove('selected'));
+          el.classList.add('selected');
+          document.getElementById('fieldCouleur').value = s.nom;
+        });
+        grid.appendChild(el);
+      });
+      link.href = c.couleursUrl || '#';
+      link.style.display = c.couleursUrl ? 'inline-block' : 'none';
+    } else if (c.couleursUrl) {
+      section.style.display = 'block';
+      link.href = c.couleursUrl;
+      link.style.display = 'inline-block';
+    } else {
+      section.style.display = 'none';
     }
 
     document.getElementById('orderForm').style.display = 'block';
@@ -563,9 +673,7 @@
     carousel.querySelectorAll('.dot').forEach((d, j)  => d.classList.toggle('active', j === modalImgIdx));
   }
 
-  function closeModal() {
-    document.getElementById('modalOverlay').classList.remove('open');
-  }
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
   document.getElementById('modalOverlay').addEventListener('click', e => {
     if (e.target === document.getElementById('modalOverlay')) closeModal();
   });
@@ -583,31 +691,25 @@
     const body    = encodeURIComponent(
       `${prenom} ${nom} a passé une commande\n\nCréation : ${creation}\nCouleur : ${couleur}\nMessage : ${message}`
     );
-
     window.location.href = `mailto:${MANON_EMAIL}?subject=${subject}&body=${body}`;
-
     document.getElementById('orderForm').style.display = 'none';
     document.getElementById('successMsg').style.display = 'block';
   });
 
-  // ── Admin : upload photos ─────────────────────────────────────────────────
-  let uploadIdx = 0;
-  let widget;
+  // ── Admin : photos ────────────────────────────────────────────────────────
+  let uploadIdx = 0, widget;
 
   function openUpload(i) {
     uploadIdx = i;
     document.getElementById('uploadTitle').textContent = `Photos — ${creations[i].nom}`;
     renderPhotosList();
     document.getElementById('uploadPanel').classList.add('open');
-
     widget = cloudinary.createUploadWidget(
       { cloudName: CLOUD_NAME, uploadPreset: UPLOAD_PRESET, multiple: true, sources: ['local','camera'] },
       (err, result) => {
         if (!err && result.event === 'success') {
           creations[uploadIdx].images.push(result.info.secure_url);
-          saveCreations();
-          renderPhotosList();
-          renderAll();
+          saveCreations(); renderPhotosList(); renderAll();
         }
       }
     );
@@ -617,56 +719,91 @@
   function renderPhotosList() {
     const list = document.getElementById('photosList');
     list.innerHTML = '';
-    creations[uploadIdx].images.forEach((url, j) => {
+    const imgs = creations[uploadIdx].images;
+    if (!imgs.length) { list.innerHTML = '<span style="color:#c0b09a;font-size:0.82rem">Aucune photo</span>'; return; }
+    imgs.forEach((url, j) => {
       const wrap = document.createElement('div');
       wrap.className = 'photo-thumb-wrap';
-      wrap.innerHTML = `
-        <img src="${url}" />
-        <button class="remove-photo" onclick="removePhoto(${j})">×</button>
-      `;
+      wrap.innerHTML = `<img src="${url}" /><button class="remove-photo" onclick="removePhoto(${j})">×</button>`;
       list.appendChild(wrap);
     });
-    if (!creations[uploadIdx].images.length) {
-      list.innerHTML = '<span style="color:#ccc;font-size:0.85rem">Aucune photo pour l\'instant</span>';
-    }
   }
 
   function removePhoto(j) {
     creations[uploadIdx].images.splice(j, 1);
-    saveCreations();
-    renderPhotosList();
-    renderAll();
+    saveCreations(); renderPhotosList(); renderAll();
   }
 
-  function closeUpload() {
-    if (widget) widget.destroy();
-    document.getElementById('uploadPanel').classList.remove('open');
+  function closeUpload() { if (widget) widget.destroy(); document.getElementById('uploadPanel').classList.remove('open'); }
+
+  // ── Admin : couleurs ──────────────────────────────────────────────────────
+  let colorsIdx = 0;
+
+  function openColors(i) {
+    colorsIdx = i;
+    document.getElementById('colorsPanelTitle').textContent = `Couleurs — ${creations[i].nom}`;
+    document.getElementById('colorsUrl').value = creations[i].couleursUrl || '';
+    renderAdminSwatches();
+    document.getElementById('colorsPanel').classList.add('open');
   }
+
+  function renderAdminSwatches() {
+    const list = document.getElementById('adminSwatchesList');
+    list.innerHTML = '';
+    (creations[colorsIdx].couleurs || []).forEach((s, j) => {
+      const el = document.createElement('div');
+      el.className = 'admin-swatch-item';
+      el.innerHTML = `
+        <div class="admin-swatch-color" style="background:${s.hex}"></div>
+        <span>${s.nom}</span>
+        <button class="admin-swatch-remove" onclick="removeSwatch(${j})">×</button>
+      `;
+      list.appendChild(el);
+    });
+    if (!creations[colorsIdx].couleurs?.length) {
+      list.innerHTML = '<span style="color:#c0b09a;font-size:0.82rem">Aucune couleur ajoutée</span>';
+    }
+  }
+
+  function addSwatch() {
+    const hex = document.getElementById('swatchColor').value;
+    const nom = document.getElementById('swatchName').value.trim();
+    if (!nom) return;
+    if (!creations[colorsIdx].couleurs) creations[colorsIdx].couleurs = [];
+    creations[colorsIdx].couleurs.push({ hex, nom });
+    document.getElementById('swatchName').value = '';
+    renderAdminSwatches();
+  }
+
+  function removeSwatch(j) {
+    creations[colorsIdx].couleurs.splice(j, 1);
+    renderAdminSwatches();
+  }
+
+  function saveColors() {
+    creations[colorsIdx].couleursUrl = document.getElementById('colorsUrl').value.trim();
+    saveCreations(); renderAll();
+    document.getElementById('colorsPanel').classList.remove('open');
+  }
+
+  function closeColors() { document.getElementById('colorsPanel').classList.remove('open'); }
 
   // ── Admin : nouvelle création ─────────────────────────────────────────────
-  function openNewCreation() {
-    document.getElementById('newCreationPanel').classList.add('open');
-  }
-  function closeNewCreation() {
-    document.getElementById('newCreationPanel').classList.remove('open');
-  }
+  function openNewCreation()  { document.getElementById('newCreationPanel').classList.add('open'); }
+  function closeNewCreation() { document.getElementById('newCreationPanel').classList.remove('open'); }
   function saveNewCreation() {
-    const nom      = document.getElementById('ncNom').value.trim();
-    const matiere  = document.getElementById('ncMatiere').value.trim();
+    const nom     = document.getElementById('ncNom').value.trim();
+    const matiere = document.getElementById('ncMatiere').value.trim();
     const couleurs = document.getElementById('ncCouleurs').value.trim();
     if (!nom) return;
-    creations.push({ nom, matiere, images: [], couleursUrl: couleurs });
-    saveCreations();
-    renderAll();
-    closeNewCreation();
+    creations.push({ nom, matiere, images: [], couleursUrl: couleurs, couleurs: [] });
+    saveCreations(); renderAll(); closeNewCreation();
   }
 
-  // ── Admin : supprimer création ────────────────────────────────────────────
   function deleteCreation(i) {
     if (!confirm(`Supprimer "${creations[i].nom}" ?`)) return;
     creations.splice(i, 1);
-    saveCreations();
-    renderAll();
+    saveCreations(); renderAll();
   }
 
   // ── Init ──────────────────────────────────────────────────────────────────
