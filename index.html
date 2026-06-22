@@ -19,18 +19,8 @@
       text-align: center;
       border-bottom: 1px solid #f0f0f0;
     }
-
-    header h1 {
-      font-size: 2rem;
-      font-weight: normal;
-      letter-spacing: 0.04em;
-    }
-
-    header p {
-      margin-top: 8px;
-      color: #888;
-      font-size: 0.95rem;
-    }
+    header h1 { font-size: 2rem; font-weight: normal; letter-spacing: 0.04em; }
+    header p  { margin-top: 8px; color: #888; font-size: 0.95rem; }
 
     main {
       max-width: 960px;
@@ -38,56 +28,88 @@
       padding: 48px 24px;
     }
 
+    /* ── Grille créations ── */
     .creations {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 40px;
     }
 
-    .card {
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-
+    .card { cursor: pointer; transition: transform 0.2s; }
     .card:hover { transform: translateY(-3px); }
 
-    .card-img {
+    /* Carrousel dans la carte */
+    .card-carousel {
+      position: relative;
       width: 100%;
       aspect-ratio: 4/5;
       background: #f7f7f7;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       overflow: hidden;
     }
 
-    .card-img img {
+    .card-carousel img {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.4s;
     }
+    .card-carousel img.active { opacity: 1; }
 
-    .card-img .placeholder {
+    .card-carousel .placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: #ccc;
       font-size: 0.85rem;
     }
 
-    .card-info {
-      padding: 14px 0 0;
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.8);
+      border: none;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.2s;
     }
+    .card-carousel:hover .carousel-btn { opacity: 1; }
+    .carousel-btn.prev { left: 6px; }
+    .carousel-btn.next { right: 6px; }
 
-    .card-info h2 {
-      font-size: 1.05rem;
-      font-weight: normal;
+    .carousel-dots {
+      position: absolute;
+      bottom: 8px;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 5px;
     }
-
-    .card-info .matiere {
-      color: #999;
-      font-size: 0.85rem;
-      margin-top: 4px;
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      transition: background 0.2s;
     }
+    .dot.active { background: #fff; }
 
-    /* Modal */
+    .card-info { padding: 14px 0 0; }
+    .card-info h2 { font-size: 1.05rem; font-weight: normal; }
+    .card-info .matiere { color: #999; font-size: 0.85rem; margin-top: 4px; }
+
+    /* ── Modal commande ── */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -98,7 +120,6 @@
       justify-content: center;
       padding: 24px;
     }
-
     .modal-overlay.open { display: flex; }
 
     .modal {
@@ -110,34 +131,48 @@
       overflow-y: auto;
     }
 
-    .modal h2 {
-      font-size: 1.3rem;
-      font-weight: normal;
-      margin-bottom: 6px;
-    }
+    .modal h2 { font-size: 1.3rem; font-weight: normal; margin-bottom: 6px; }
+    .modal .matiere { color: #999; font-size: 0.85rem; margin-bottom: 20px; }
 
-    .modal .matiere {
-      color: #999;
-      font-size: 0.85rem;
-      margin-bottom: 24px;
+    /* Carrousel dans le modal */
+    .modal-carousel {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #f7f7f7;
+      overflow: hidden;
+      margin-bottom: 20px;
     }
+    .modal-carousel img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .modal-carousel img.active { opacity: 1; }
+    .modal-carousel .placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ccc;
+      font-size: 0.85rem;
+    }
+    .modal-carousel .carousel-btn { opacity: 1; }
 
     .modal a.couleurs-link {
       display: inline-block;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       font-size: 0.9rem;
       color: #555;
       text-decoration: underline;
     }
 
-    label {
-      display: block;
-      font-size: 0.85rem;
-      color: #555;
-      margin-bottom: 6px;
-      margin-top: 16px;
-    }
-
+    label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 6px; margin-top: 16px; }
     input, textarea {
       width: 100%;
       border: 1px solid #ddd;
@@ -149,16 +184,10 @@
       border-radius: 0;
       background: #fff;
     }
-
     input:focus, textarea:focus { border-color: #aaa; }
-
     textarea { resize: vertical; min-height: 90px; }
 
-    .modal-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 28px;
-    }
+    .modal-actions { display: flex; gap: 12px; margin-top: 28px; }
 
     button {
       cursor: pointer;
@@ -167,20 +196,9 @@
       border: none;
       padding: 11px 24px;
     }
-
-    .btn-primary {
-      background: #1a1a1a;
-      color: #fff;
-      flex: 1;
-    }
-
+    .btn-primary { background: #1a1a1a; color: #fff; flex: 1; }
     .btn-primary:hover { background: #333; }
-
-    .btn-secondary {
-      background: #f0f0f0;
-      color: #555;
-    }
-
+    .btn-secondary { background: #f0f0f0; color: #555; }
     .btn-secondary:hover { background: #e5e5e5; }
 
     .success-msg {
@@ -192,15 +210,124 @@
       line-height: 1.6;
     }
 
+    /* ── Vue admin ── */
+    .admin-bar {
+      display: none;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 10px 24px;
+      font-size: 0.8rem;
+      text-align: center;
+      letter-spacing: 0.05em;
+    }
+    body.admin .admin-bar { display: block; }
+
+    .admin-card-actions {
+      display: none;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    body.admin .admin-card-actions { display: flex; }
+
+    .btn-admin {
+      font-size: 0.75rem;
+      padding: 6px 12px;
+      background: #f0f0f0;
+      color: #555;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-admin:hover { background: #e0e0e0; }
+    .btn-admin.danger { background: #fee; color: #c00; }
+    .btn-admin.danger:hover { background: #fcc; }
+
+    /* Panel upload Cloudinary */
+    .upload-panel {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .upload-panel.open { display: flex; }
+    .upload-box {
+      background: #fff;
+      padding: 36px;
+      max-width: 480px;
+      width: 100%;
+    }
+    .upload-box h3 { font-weight: normal; margin-bottom: 20px; }
+    .upload-box .photos-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+      min-height: 60px;
+    }
+    .upload-box .photos-list img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+    }
+    .photo-thumb-wrap { position: relative; }
+    .photo-thumb-wrap .remove-photo {
+      position: absolute;
+      top: -6px; right: -6px;
+      width: 18px; height: 18px;
+      background: #c00;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      font-size: 0.65rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .upload-actions { display: flex; gap: 10px; margin-top: 16px; }
+
+    /* Formulaire ajout création */
+    .new-creation-panel {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .new-creation-panel.open { display: flex; }
+    .new-creation-box {
+      background: #fff;
+      padding: 36px;
+      max-width: 480px;
+      width: 100%;
+    }
+    .new-creation-box h3 { font-weight: normal; margin-bottom: 20px; }
+
     footer {
       text-align: center;
       padding: 48px 24px;
       color: #ccc;
       font-size: 0.8rem;
     }
+
+    .admin-global-actions {
+      display: none;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+    body.admin .admin-global-actions { display: flex; }
   </style>
 </head>
 <body>
+
+<div class="admin-bar">✦ Vue admin — visible uniquement par toi</div>
 
 <header>
   <h1>Créations Crochet</h1>
@@ -208,19 +335,28 @@
 </header>
 
 <main>
+  <div class="admin-global-actions">
+    <button class="btn-admin" onclick="openNewCreation()">+ Ajouter une création</button>
+  </div>
   <div class="creations" id="creations"></div>
 </main>
 
+<!-- Modal commande -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal" id="modal">
     <h2 id="modalNom"></h2>
     <div class="matiere" id="modalMatiere"></div>
 
-    <div id="couleurSection">
-      <a class="couleurs-link" id="modalCouleursLink" href="#" target="_blank" rel="noopener">
-        Choisir une couleur sur le site de la marque →
-      </a>
+    <div class="modal-carousel" id="modalCarousel">
+      <div class="placeholder">Aucune photo</div>
+      <button class="carousel-btn prev" onclick="modalSlide(-1)">‹</button>
+      <button class="carousel-btn next" onclick="modalSlide(1)">›</button>
+      <div class="carousel-dots" id="modalDots"></div>
     </div>
+
+    <a class="couleurs-link" id="modalCouleursLink" href="#" target="_blank" rel="noopener">
+      Choisir une couleur sur le site de la marque →
+    </a>
 
     <form id="orderForm">
       <input type="hidden" name="creation" id="fieldCreation" />
@@ -231,9 +367,6 @@
       <label for="fieldNom">Nom</label>
       <input type="text" id="fieldNom" name="nom" required />
 
-      <label for="fieldEmail">Email (pour que Manon te réponde)</label>
-      <input type="email" id="fieldEmail" name="email" required />
-
       <label for="fieldCouleur">Référence couleur choisie</label>
       <input type="text" id="fieldCouleur" name="couleur" placeholder="ex. Drops Karisma coloris 100 Off White" required />
 
@@ -241,7 +374,7 @@
       <textarea id="fieldMessage" name="message"></textarea>
 
       <div class="modal-actions">
-        <button type="button" class="btn-secondary" id="closeModal">Annuler</button>
+        <button type="button" class="btn-secondary" onclick="closeModal()">Annuler</button>
         <button type="submit" class="btn-primary">Envoyer ma commande</button>
       </div>
     </form>
@@ -252,124 +385,295 @@
   </div>
 </div>
 
-<footer>Manon Tapié · Créations crochet faites main</footer>
+<!-- Panel upload photos -->
+<div class="upload-panel" id="uploadPanel">
+  <div class="upload-box">
+    <h3 id="uploadTitle">Photos</h3>
+    <div class="photos-list" id="photosList"></div>
+    <button class="btn-admin" id="uploadBtn">+ Ajouter une photo</button>
+    <div class="upload-actions">
+      <button class="btn-secondary" onclick="closeUpload()">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Panel nouvelle création -->
+<div class="new-creation-panel" id="newCreationPanel">
+  <div class="new-creation-box">
+    <h3>Nouvelle création</h3>
+    <label>Nom</label>
+    <input type="text" id="ncNom" placeholder="Bonnet, sac, top..." />
+    <label>Matière</label>
+    <input type="text" id="ncMatiere" placeholder="Laine, coton..." />
+    <label>Lien vers les couleurs</label>
+    <input type="url" id="ncCouleurs" placeholder="https://..." />
+    <div class="upload-actions" style="margin-top:24px">
+      <button class="btn-secondary" onclick="closeNewCreation()">Annuler</button>
+      <button class="btn-primary" onclick="saveNewCreation()">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- Cloudinary widget -->
+<script src="https://upload-widget.cloudinary.com/global/all.js"></script>
 
 <script>
-  // ── Données créations ──────────────────────────────────────────────────────
-  // Pour ajouter une création : dupliquer un objet ci-dessous.
-  const creations = [
+  // ── Config ────────────────────────────────────────────────────────────────
+  const CLOUD_NAME    = 'dpuk356dk';
+  const UPLOAD_PRESET = 'crochet_upload';
+  const MANON_EMAIL   = 'tapie.manon@gmail.com';
+
+  // ── Créations (source de vérité) ──────────────────────────────────────────
+  // Pour ajouter une création : dupliquer un objet.
+  // images : tableau d'URLs Cloudinary (vide = placeholder affiché)
+  let creations = loadCreations() || [
     {
       nom: "Bonnet fisherman",
       matiere: "Laine",
-      image: "",   // URL Cloudinary
+      images: [],
       couleursUrl: "https://www.garnstudio.com/yarn.php?cid=19"
     },
     {
       nom: "Bob",
       matiere: "Coton",
-      image: "",
+      images: [],
       couleursUrl: "https://www.garnstudio.com/yarn.php?cid=6"
     },
     {
       nom: "Écharpe Sophie",
       matiere: "Laine + coton",
-      image: "",
+      images: [],
       couleursUrl: "https://www.garnstudio.com/yarn.php?cid=19"
     }
   ];
 
-  // ── Rendu des cartes ───────────────────────────────────────────────────────
-  const container = document.getElementById('creations');
+  function loadCreations() {
+    try { return JSON.parse(localStorage.getItem('creations')) || null; } catch { return null; }
+  }
+  function saveCreations() {
+    localStorage.setItem('creations', JSON.stringify(creations));
+  }
 
-  creations.forEach((c, i) => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="card-img">
-        ${c.image
-          ? `<img src="${c.image}" alt="${c.nom}" />`
-          : `<span class="placeholder">Photo à venir</span>`}
-      </div>
-      <div class="card-info">
-        <h2>${c.nom}</h2>
-        <div class="matiere">${c.matiere}</div>
-      </div>
-    `;
-    card.addEventListener('click', () => openModal(i));
-    container.appendChild(card);
-  });
+  // ── Mode admin ────────────────────────────────────────────────────────────
+  const isAdmin = new URLSearchParams(location.search).get('admin') === 'true';
+  if (isAdmin) document.body.classList.add('admin');
 
-  // ── Modal ──────────────────────────────────────────────────────────────────
-  const overlay   = document.getElementById('modalOverlay');
-  const form      = document.getElementById('orderForm');
-  const successMsg = document.getElementById('successMsg');
+  // ── Rendu des cartes ──────────────────────────────────────────────────────
+  function renderAll() {
+    const container = document.getElementById('creations');
+    container.innerHTML = '';
+    creations.forEach((c, i) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="card-carousel" id="cc-${i}">
+          ${c.images.length === 0
+            ? `<div class="placeholder">Photo à venir</div>`
+            : c.images.map((url, j) =>
+                `<img src="${url}" alt="${c.nom}" class="${j===0?'active':''}" />`
+              ).join('')}
+          ${c.images.length > 1 ? `
+            <button class="carousel-btn prev" onclick="cardSlide(event,${i},-1)">‹</button>
+            <button class="carousel-btn next" onclick="cardSlide(event,${i},1)">›</button>
+            <div class="carousel-dots">
+              ${c.images.map((_,j) => `<div class="dot ${j===0?'active':''}" id="cdot-${i}-${j}"></div>`).join('')}
+            </div>` : ''}
+        </div>
+        <div class="card-info">
+          <h2>${c.nom}</h2>
+          <div class="matiere">${c.matiere}</div>
+        </div>
+        <div class="admin-card-actions">
+          <button class="btn-admin" onclick="openUpload(${i})">📷 Photos</button>
+          <button class="btn-admin danger" onclick="deleteCreation(${i})">Supprimer</button>
+        </div>
+      `;
+      // Clic sur la carte → ouvre modal (sauf si clic sur bouton admin)
+      card.querySelector('.card-carousel').addEventListener('click', () => openModal(i));
+      card.querySelector('.card-info').addEventListener('click', () => openModal(i));
+      container.appendChild(card);
+    });
+  }
+
+  // ── Carrousel carte ───────────────────────────────────────────────────────
+  const cardIndexes = {};
+  function cardSlide(e, i, dir) {
+    e.stopPropagation();
+    const c = creations[i];
+    if (!c.images.length) return;
+    cardIndexes[i] = ((cardIndexes[i] || 0) + dir + c.images.length) % c.images.length;
+    const el = document.getElementById(`cc-${i}`);
+    el.querySelectorAll('img').forEach((img, j) => img.classList.toggle('active', j === cardIndexes[i]));
+    el.querySelectorAll('.dot').forEach((d, j) => d.classList.toggle('active', j === cardIndexes[i]));
+  }
+
+  // ── Modal commande ────────────────────────────────────────────────────────
+  let modalIdx = 0;
+  let modalImgIdx = 0;
 
   function openModal(i) {
+    modalIdx = i;
+    modalImgIdx = 0;
     const c = creations[i];
-    document.getElementById('modalNom').textContent    = c.nom;
+    document.getElementById('modalNom').textContent     = c.nom;
     document.getElementById('modalMatiere').textContent = c.matiere;
-    document.getElementById('fieldCreation').value     = c.nom;
+    document.getElementById('fieldCreation').value      = c.nom;
 
     const link = document.getElementById('modalCouleursLink');
-    const section = document.getElementById('couleurSection');
-    if (c.couleursUrl) {
-      link.href = c.couleursUrl;
-      section.style.display = 'block';
+    link.href = c.couleursUrl || '#';
+    link.style.display = c.couleursUrl ? 'inline-block' : 'none';
+
+    // Carrousel modal
+    const carousel = document.getElementById('modalCarousel');
+    const dots     = document.getElementById('modalDots');
+    carousel.querySelectorAll('img').forEach(img => img.remove());
+    dots.innerHTML = '';
+
+    if (c.images.length) {
+      carousel.querySelector('.placeholder') && (carousel.querySelector('.placeholder').style.display = 'none');
+      c.images.forEach((url, j) => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = c.nom;
+        if (j === 0) img.classList.add('active');
+        carousel.insertBefore(img, carousel.querySelector('.carousel-btn.prev'));
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (j === 0 ? ' active' : '');
+        dots.appendChild(dot);
+      });
+      carousel.style.display = 'block';
     } else {
-      section.style.display = 'none';
+      carousel.style.display = c.images.length === 0 ? 'flex' : 'block';
+      if (carousel.querySelector('.placeholder')) carousel.querySelector('.placeholder').style.display = 'flex';
     }
 
-    form.style.display = 'block';
-    successMsg.style.display = 'none';
-    form.reset();
+    document.getElementById('orderForm').style.display = 'block';
+    document.getElementById('successMsg').style.display = 'none';
+    document.getElementById('orderForm').reset();
     document.getElementById('fieldCreation').value = c.nom;
-    overlay.classList.add('open');
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function modalSlide(dir) {
+    const c = creations[modalIdx];
+    if (!c.images.length) return;
+    modalImgIdx = (modalImgIdx + dir + c.images.length) % c.images.length;
+    const carousel = document.getElementById('modalCarousel');
+    carousel.querySelectorAll('img').forEach((img, j) => img.classList.toggle('active', j === modalImgIdx));
+    carousel.querySelectorAll('.dot').forEach((d, j)  => d.classList.toggle('active', j === modalImgIdx));
   }
 
   function closeModal() {
-    overlay.classList.remove('open');
+    document.getElementById('modalOverlay').classList.remove('open');
   }
+  document.getElementById('modalOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  });
 
-  document.getElementById('closeModal').addEventListener('click', closeModal);
-  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
-
-  // ── Envoi Formspree ────────────────────────────────────────────────────────
-  // Remplace YOUR_FORM_ID par l'ID Formspree après création du compte.
-  const FORMSPREE_ID = 'YOUR_FORM_ID';
-
-  form.addEventListener('submit', async e => {
+  // ── Formulaire mailto: ────────────────────────────────────────────────────
+  document.getElementById('orderForm').addEventListener('submit', e => {
     e.preventDefault();
-    const data = new FormData(form);
-    data.append('_replyto', data.get('email'));
-    data.append('_subject',
-      `Commande · ${data.get('creation')} · ${data.get('prenom')} ${data.get('nom')}`
+    const prenom   = document.getElementById('fieldPrenom').value;
+    const nom      = document.getElementById('fieldNom').value;
+    const creation = document.getElementById('fieldCreation').value;
+    const couleur  = document.getElementById('fieldCouleur').value;
+    const message  = document.getElementById('fieldMessage').value;
+
+    const subject = encodeURIComponent(`Commande · ${creation} · ${prenom} ${nom}`);
+    const body    = encodeURIComponent(
+      `${prenom} ${nom} a passé une commande\n\nCréation : ${creation}\nCouleur : ${couleur}\nMessage : ${message}`
     );
 
-    const btn = form.querySelector('.btn-primary');
-    btn.textContent = 'Envoi…';
-    btn.disabled = true;
+    window.location.href = `mailto:${MANON_EMAIL}?subject=${subject}&body=${body}`;
 
-    try {
-      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-        method: 'POST',
-        body: data,
-        headers: { Accept: 'application/json' }
-      });
-      if (res.ok) {
-        form.style.display = 'none';
-        successMsg.style.display = 'block';
-      } else {
-        alert('Une erreur est survenue, réessaie ou contacte Manon directement.');
-        btn.textContent = 'Envoyer ma commande';
-        btn.disabled = false;
-      }
-    } catch {
-      alert('Pas de connexion. Réessaie dans quelques instants.');
-      btn.textContent = 'Envoyer ma commande';
-      btn.disabled = false;
-    }
+    document.getElementById('orderForm').style.display = 'none';
+    document.getElementById('successMsg').style.display = 'block';
   });
+
+  // ── Admin : upload photos ─────────────────────────────────────────────────
+  let uploadIdx = 0;
+  let widget;
+
+  function openUpload(i) {
+    uploadIdx = i;
+    document.getElementById('uploadTitle').textContent = `Photos — ${creations[i].nom}`;
+    renderPhotosList();
+    document.getElementById('uploadPanel').classList.add('open');
+
+    widget = cloudinary.createUploadWidget(
+      { cloudName: CLOUD_NAME, uploadPreset: UPLOAD_PRESET, multiple: true, sources: ['local','camera'] },
+      (err, result) => {
+        if (!err && result.event === 'success') {
+          creations[uploadIdx].images.push(result.info.secure_url);
+          saveCreations();
+          renderPhotosList();
+          renderAll();
+        }
+      }
+    );
+    document.getElementById('uploadBtn').onclick = () => widget.open();
+  }
+
+  function renderPhotosList() {
+    const list = document.getElementById('photosList');
+    list.innerHTML = '';
+    creations[uploadIdx].images.forEach((url, j) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'photo-thumb-wrap';
+      wrap.innerHTML = `
+        <img src="${url}" />
+        <button class="remove-photo" onclick="removePhoto(${j})">×</button>
+      `;
+      list.appendChild(wrap);
+    });
+    if (!creations[uploadIdx].images.length) {
+      list.innerHTML = '<span style="color:#ccc;font-size:0.85rem">Aucune photo pour l\'instant</span>';
+    }
+  }
+
+  function removePhoto(j) {
+    creations[uploadIdx].images.splice(j, 1);
+    saveCreations();
+    renderPhotosList();
+    renderAll();
+  }
+
+  function closeUpload() {
+    if (widget) widget.destroy();
+    document.getElementById('uploadPanel').classList.remove('open');
+  }
+
+  // ── Admin : nouvelle création ─────────────────────────────────────────────
+  function openNewCreation() {
+    document.getElementById('newCreationPanel').classList.add('open');
+  }
+  function closeNewCreation() {
+    document.getElementById('newCreationPanel').classList.remove('open');
+  }
+  function saveNewCreation() {
+    const nom      = document.getElementById('ncNom').value.trim();
+    const matiere  = document.getElementById('ncMatiere').value.trim();
+    const couleurs = document.getElementById('ncCouleurs').value.trim();
+    if (!nom) return;
+    creations.push({ nom, matiere, images: [], couleursUrl: couleurs });
+    saveCreations();
+    renderAll();
+    closeNewCreation();
+  }
+
+  // ── Admin : supprimer création ────────────────────────────────────────────
+  function deleteCreation(i) {
+    if (!confirm(`Supprimer "${creations[i].nom}" ?`)) return;
+    creations.splice(i, 1);
+    saveCreations();
+    renderAll();
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  renderAll();
 </script>
+
+<footer>Manon Tapié · Créations crochet faites main</footer>
 
 </body>
 </html>
