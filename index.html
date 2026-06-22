@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Créations Crochet · Manon</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: #fff;
+      color: #1a1a1a;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 48px 24px 32px;
+      text-align: center;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: normal;
+      letter-spacing: 0.04em;
+    }
+
+    header p {
+      margin-top: 8px;
+      color: #888;
+      font-size: 0.95rem;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    .creations {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 40px;
+    }
+
+    .card {
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .card:hover { transform: translateY(-3px); }
+
+    .card-img {
+      width: 100%;
+      aspect-ratio: 4/5;
+      background: #f7f7f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-img .placeholder {
+      color: #ccc;
+      font-size: 0.85rem;
+    }
+
+    .card-info {
+      padding: 14px 0 0;
+    }
+
+    .card-info h2 {
+      font-size: 1.05rem;
+      font-weight: normal;
+    }
+
+    .card-info .matiere {
+      color: #999;
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: #fff;
+      max-width: 520px;
+      width: 100%;
+      padding: 36px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal h2 {
+      font-size: 1.3rem;
+      font-weight: normal;
+      margin-bottom: 6px;
+    }
+
+    .modal .matiere {
+      color: #999;
+      font-size: 0.85rem;
+      margin-bottom: 24px;
+    }
+
+    .modal a.couleurs-link {
+      display: inline-block;
+      margin-bottom: 24px;
+      font-size: 0.9rem;
+      color: #555;
+      text-decoration: underline;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 6px;
+      margin-top: 16px;
+    }
+
+    input, textarea {
+      width: 100%;
+      border: 1px solid #ddd;
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+      border-radius: 0;
+      background: #fff;
+    }
+
+    input:focus, textarea:focus { border-color: #aaa; }
+
+    textarea { resize: vertical; min-height: 90px; }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.9rem;
+      border: none;
+      padding: 11px 24px;
+    }
+
+    .btn-primary {
+      background: #1a1a1a;
+      color: #fff;
+      flex: 1;
+    }
+
+    .btn-primary:hover { background: #333; }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #555;
+    }
+
+    .btn-secondary:hover { background: #e5e5e5; }
+
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 24px 0 8px;
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    footer {
+      text-align: center;
+      padding: 48px 24px;
+      color: #ccc;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Créations Crochet</h1>
+  <p>Pièces faites main · Commande sur mesure</p>
+</header>
+
+<main>
+  <div class="creations" id="creations"></div>
+</main>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <h2 id="modalNom"></h2>
+    <div class="matiere" id="modalMatiere"></div>
+
+    <div id="couleurSection">
+      <a class="couleurs-link" id="modalCouleursLink" href="#" target="_blank" rel="noopener">
+        Choisir une couleur sur le site de la marque →
+      </a>
+    </div>
+
+    <form id="orderForm">
+      <input type="hidden" name="creation" id="fieldCreation" />
+
+      <label for="fieldPrenom">Prénom</label>
+      <input type="text" id="fieldPrenom" name="prenom" required />
+
+      <label for="fieldNom">Nom</label>
+      <input type="text" id="fieldNom" name="nom" required />
+
+      <label for="fieldEmail">Email (pour que Manon te réponde)</label>
+      <input type="email" id="fieldEmail" name="email" required />
+
+      <label for="fieldCouleur">Référence couleur choisie</label>
+      <input type="text" id="fieldCouleur" name="couleur" placeholder="ex. Drops Karisma coloris 100 Off White" required />
+
+      <label for="fieldMessage">Message (taille, délai souhaité…)</label>
+      <textarea id="fieldMessage" name="message"></textarea>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="closeModal">Annuler</button>
+        <button type="submit" class="btn-primary">Envoyer ma commande</button>
+      </div>
+    </form>
+
+    <div class="success-msg" id="successMsg">
+      ✓ Commande envoyée !<br>Manon revient vers toi très vite.
+    </div>
+  </div>
+</div>
+
+<footer>Manon Tapié · Créations crochet faites main</footer>
+
+<script>
+  // ── Données créations ──────────────────────────────────────────────────────
+  // Pour ajouter une création : dupliquer un objet ci-dessous.
+  const creations = [
+    {
+      nom: "Bonnet fisherman",
+      matiere: "Laine",
+      image: "",   // URL Cloudinary
+      couleursUrl: "https://www.garnstudio.com/yarn.php?cid=19"
+    },
+    {
+      nom: "Bob",
+      matiere: "Coton",
+      image: "",
+      couleursUrl: "https://www.garnstudio.com/yarn.php?cid=6"
+    },
+    {
+      nom: "Écharpe Sophie",
+      matiere: "Laine + coton",
+      image: "",
+      couleursUrl: "https://www.garnstudio.com/yarn.php?cid=19"
+    }
+  ];
+
+  // ── Rendu des cartes ───────────────────────────────────────────────────────
+  const container = document.getElementById('creations');
+
+  creations.forEach((c, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-img">
+        ${c.image
+          ? `<img src="${c.image}" alt="${c.nom}" />`
+          : `<span class="placeholder">Photo à venir</span>`}
+      </div>
+      <div class="card-info">
+        <h2>${c.nom}</h2>
+        <div class="matiere">${c.matiere}</div>
+      </div>
+    `;
+    card.addEventListener('click', () => openModal(i));
+    container.appendChild(card);
+  });
+
+  // ── Modal ──────────────────────────────────────────────────────────────────
+  const overlay   = document.getElementById('modalOverlay');
+  const form      = document.getElementById('orderForm');
+  const successMsg = document.getElementById('successMsg');
+
+  function openModal(i) {
+    const c = creations[i];
+    document.getElementById('modalNom').textContent    = c.nom;
+    document.getElementById('modalMatiere').textContent = c.matiere;
+    document.getElementById('fieldCreation').value     = c.nom;
+
+    const link = document.getElementById('modalCouleursLink');
+    const section = document.getElementById('couleurSection');
+    if (c.couleursUrl) {
+      link.href = c.couleursUrl;
+      section.style.display = 'block';
+    } else {
+      section.style.display = 'none';
+    }
+
+    form.style.display = 'block';
+    successMsg.style.display = 'none';
+    form.reset();
+    document.getElementById('fieldCreation').value = c.nom;
+    overlay.classList.add('open');
+  }
+
+  function closeModal() {
+    overlay.classList.remove('open');
+  }
+
+  document.getElementById('closeModal').addEventListener('click', closeModal);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+
+  // ── Envoi Formspree ────────────────────────────────────────────────────────
+  // Remplace YOUR_FORM_ID par l'ID Formspree après création du compte.
+  const FORMSPREE_ID = 'YOUR_FORM_ID';
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const data = new FormData(form);
+    data.append('_replyto', data.get('email'));
+    data.append('_subject',
+      `Commande · ${data.get('creation')} · ${data.get('prenom')} ${data.get('nom')}`
+    );
+
+    const btn = form.querySelector('.btn-primary');
+    btn.textContent = 'Envoi…';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        method: 'POST',
+        body: data,
+        headers: { Accept: 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        successMsg.style.display = 'block';
+      } else {
+        alert('Une erreur est survenue, réessaie ou contacte Manon directement.');
+        btn.textContent = 'Envoyer ma commande';
+        btn.disabled = false;
+      }
+    } catch {
+      alert('Pas de connexion. Réessaie dans quelques instants.');
+      btn.textContent = 'Envoyer ma commande';
+      btn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>
